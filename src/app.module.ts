@@ -4,7 +4,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsuarioModule } from './usuario/usuario.module';
 import { AuthModule } from './auth/auth.module';
-import { PedidoModule } from './pedido/pedido.module';
+import { VendaModule } from './venda/venda.module';
 
 @Module({
   imports: [
@@ -15,7 +15,7 @@ import { PedidoModule } from './pedido/pedido.module';
     UsuarioModule,
     AuthModule,
     HttpModule,
-    PedidoModule,
+    VendaModule,
   ],
   controllers: [AppController],
   providers: [AppService],

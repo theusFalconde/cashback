@@ -43,7 +43,7 @@ export class AuthService {
     return {
       expiresIn: 3600,
       accessToken: `Bearer ${jwt}`,
-      roles: usuario.roles,
+      usuario: usuario,
     };
   }
 }

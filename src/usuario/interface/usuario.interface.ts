@@ -1,5 +1,3 @@
-import { Exclude } from 'class-transformer';
-
 export interface Usuario {
   readonly id: string;
   readonly nome: string;
