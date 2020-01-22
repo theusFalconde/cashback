@@ -5,6 +5,6 @@ export interface Venda {
   readonly codigo: string;
   readonly valor: number;
   readonly data: Date;
-  readonly cpf: string;
+  readonly usuario: Usuario;
   readonly status: string;
 }
