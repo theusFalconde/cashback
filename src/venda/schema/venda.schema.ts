@@ -1,7 +1,6 @@
 import * as mongoose from 'mongoose';
-import * as bcrypt from 'bcrypt';
 
-export const UsuarioSchema = new mongoose.Schema({
+export const VendaSchema = new mongoose.Schema({
   codigo: {
     type: String,
     required: true,
@@ -14,8 +13,9 @@ export const UsuarioSchema = new mongoose.Schema({
     type: Date,
     required: true,
   },
-  cpf: {
-    type: String,
+  usuario: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Usuario',
     required: true,
   },
   status: {
@@ -24,7 +24,7 @@ export const UsuarioSchema = new mongoose.Schema({
   },
 });
 
-UsuarioSchema.methods.toJSON = function() {
+VendaSchema.methods.toJSON = function() {
   var obj = this.toObject();
   delete obj._id;
   delete obj._v;
