@@ -19,14 +19,13 @@ export const VendaSchema = new mongoose.Schema({
     required: true,
   },
   status: {
-    type: Boolean,
+    type: String,
     required: true,
   },
 });
 
 VendaSchema.methods.toJSON = function() {
   var obj = this.toObject();
-  delete obj._id;
   delete obj._v;
   return obj;
 };

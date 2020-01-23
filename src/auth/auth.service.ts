@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, UnauthorizedException, BadRequestException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UsuarioService } from '../usuario/usuario.service';
 import { JwtPayload } from './interface/jwt-payload.interface';
@@ -14,6 +14,9 @@ export class AuthService {
 
   async validateUserByPassword(login: LoginDto) {
     let usuarioLogando = await this.usuarioService.findByEmail(login.email);
+    if(!usuarioLogando) {
+      throw new BadRequestException('Usuário não encontrado ou bloqueado.')
+    }
     return new Promise(resolve => {
       usuarioLogando.checkPassword(login.senha, (err, isMatch) => {
         if (err) throw new UnauthorizedException();

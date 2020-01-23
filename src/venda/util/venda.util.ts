@@ -1,6 +1,12 @@
-import { StatusVenda } from "../constant/statusVenda.const";
+import { StatusVenda } from "../../common/enum/vendaStatus.enum";
 
 export class VendaUtil {
+    static cpfAprovado = "15350946056"
+
+    static urlApiExterna = 'https://mdaqk8ek5j.execute-api.us-east-1.amazonaws.com/v1/cashback?cpf='
+
+    static tokenApiExterna = 'Bearer ZXPURQOARHiMc6Y0flhRC1LVlZQVFRnm'
+
     static calcPercCashback(valor) {
         if (valor > 0 && valor < 1000) {
             return 10;

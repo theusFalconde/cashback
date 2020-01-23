@@ -2,6 +2,8 @@ import { Usuario } from "src/usuario/interface/usuario.interface";
 import { VendaUtil } from "../util/venda.util";
 
 export class VendaResponse {
+    private _id: string
+
     private _codigo: string;
 
     private _valor: number;
@@ -12,12 +14,21 @@ export class VendaResponse {
 
     private _usuario: Usuario;
 
-    constructor(codigo: string, valor: number, data: Date, status: string, usuario: Usuario) { 
+    constructor(id: string, codigo: string, valor: number, data: Date, status: string, usuario: Usuario) { 
+        this._id = id
         this._codigo = codigo;
         this._valor = valor;
         this._data = data;
         this._status = status;
         this._usuario = usuario;
+    }
+
+    get id() {
+        return this._id;
+    }
+
+    set id(id: string) {
+        this._id = id;
     }
 
     get codigo() {

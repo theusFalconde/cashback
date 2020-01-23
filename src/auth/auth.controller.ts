@@ -8,7 +8,7 @@ import { LoginDto } from '../usuario/dto/login.dto';
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  @Post()
+  @Post('/login')
   async login(@Body() loginDto: LoginDto) {
     let result = await this.authService.validateUserByPassword(loginDto);
     return result;

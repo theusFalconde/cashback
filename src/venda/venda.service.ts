@@ -1,82 +1,91 @@
-import { BadRequestException, Injectable, NotFoundException, NotAcceptableException, HttpService } from '@nestjs/common';
+import { BadRequestException, HttpService, Injectable, NotAcceptableException, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { StatusVenda } from 'src/venda/constant/statusVenda.const';
+import { StatusVenda } from 'src/common/enum/vendaStatus.enum';
+import { Usuario } from 'src/usuario/interface/usuario.interface';
 import { UsuarioService } from 'src/usuario/usuario.service';
-import { VendaConstante } from './constant/venda.constant';
+import { Util } from '../common/util/util';
 import { VendaDto } from './dto/venda.dto';
 import { Venda } from './interface/venda.interface';
-import { Usuario } from 'src/usuario/interface/usuario.interface';
 import { VendaResponse } from './response/venda.response';
+import { VendaUtil } from './util/venda.util';
 
 @Injectable()
 export class VendaService {
-    constructor(@InjectModel('Venda') private vendaModel: Model<Venda>, 
-                private usuarioService: UsuarioService,
-                private readonly httpService: HttpService) { }
+    constructor(@InjectModel('Venda') private vendaModel: Model<Venda>,
+        @InjectModel('Usuario') private usuarioModel: Model<Usuario>,
+        private usuarioService: UsuarioService,
+        private readonly httpService: HttpService) { }
 
     async create(vendaDto: VendaDto) {
-        let usuario = await this.verificarUsuario(vendaDto.cpf)
-        if (VendaConstante.cpfAprovado === vendaDto.cpf) {
-            vendaDto.status = StatusVenda.aprovado.key;
-        } else {
-            vendaDto.status = StatusVenda.validacao.key;
+        if (await this.verificarCodigoVendaExiste(vendaDto.codigo)) {
+            vendaDto.cpf = Util.removeMaskCpf(vendaDto.cpf)
+            let usuario = await this.verificarUsuario(vendaDto.cpf)
+            if (VendaUtil.cpfAprovado === vendaDto.cpf) {
+                vendaDto.status = StatusVenda.aprovado;
+            } else {
+                vendaDto.status = StatusVenda.validacao;
+            }
+            vendaDto.usuario = usuario
+            let vendaCriada = new this.vendaModel(vendaDto);
+            return await vendaCriada.save();
         }
-        vendaDto.usuario = usuario
-        let vendaCriada = new this.vendaModel(vendaDto);
-        return await vendaCriada.save();
     }
 
     async update(id: string, vendaDto: VendaDto) {
         if (await this.verificarVendaUpdate(id)) {
-            let usuario = this.verificarUsuario(vendaDto.cpf)
+            vendaDto.cpf = Util.removeMaskCpf(vendaDto.cpf)
+            let usuario = await this.verificarUsuario(vendaDto.cpf)
             vendaDto.usuario = usuario
-            let vendaAtualizada = new this.vendaModel.findByIdAndUpdate(id, vendaDto, { new: true });
+            let vendaAtualizada = this.vendaModel.findByIdAndUpdate(id, vendaDto, { new: true });
             return vendaAtualizada;
         }
     }
 
     async delete(id: string) {
-        if(this.verificarVendaDelete(id)) {
-            let vendaDeletada = new this.vendaModel.findByIdAndRemove(id);
+        if (this.verificarVendaDelete(id)) {
+            let vendaDeletada = this.vendaModel.findByIdAndRemove(id);
             return vendaDeletada;
         }
     }
 
     async findCashbackAcumuladoByCpf(cpf) {
-        let retornoApi = await this.httpService.get(`https://mdaqk8ek5j.execute-api.us-east-1.amazonaws.com/v1/cashback?cpf=${cpf}`)
+        let headerRequest = { 'Authorization': VendaUtil.tokenApiExterna }
+        let retornoApi = await this.httpService.get(VendaUtil.urlApiExterna + cpf, { headers: headerRequest })
         console.log('Retorno API externa: ', retornoApi)
         return retornoApi
     }
 
     async findById(id): Model<Venda> {
-        return await this.vendaModel.findOne({ id: id });
+        return await this.vendaModel.findById(id).populate('usuario', this.usuarioModel).exec();
     }
 
     async findByCodigo(codigo): Model<Venda> {
-        return await this.vendaModel.findOne({ codigo: codigo });
+        return await this.vendaModel.findOne({ codigo: codigo }).populate('usuario', this.usuarioModel).exec();
     }
 
     async findByCpf(cpf): Promise<Venda[]> {
-        return await this.vendaModel.find({ "usuario.cpf": cpf });
+        cpf = Util.removeMaskCpf(cpf)
+        return await this.vendaModel.find({ "usuario.cpf": cpf }).populate('usuario', this.usuarioModel).exec();
     }
 
     async findAll(): Promise<Venda[]> {
-        return await this.vendaModel.find().exec();
+        return await this.vendaModel.find().populate('usuario', this.usuarioModel).exec();
     }
 
     async findAllForResponse() {
         let vendas = await this.findAll();
-        return this.modelToResponse(vendas);;
+        return this.modelToResponse(vendas);
     }
 
     async findByCpfForResponse(cpf) {
+        cpf = Util.removeMaskCpf(cpf)
         let vendas = await this.findByCpf(cpf);
         return this.modelToResponse(vendas);
     }
 
     modelToResponse(vendas) {
-        return vendas.map(v => new VendaResponse(v.codigo, v.valor, v.data, v.status, v.usuario));
+        return vendas.map(v => new VendaResponse(v.id, v.codigo, v.valor, v.data, v.status, v.usuario));
     }
 
     async verificarUsuario(cpf): Model<Usuario> {
@@ -93,7 +102,7 @@ export class VendaService {
             throw new NotFoundException('Nenhuma venda encontrada com esse id')
         } else if (this.verificarStatusVendaValido(venda.status)) {
             throw new NotAcceptableException('Status da venda inválido')
-        } else if (venda.status !== StatusVenda.validacao.key) {
+        } else if (venda.status !== StatusVenda.validacao) {
             throw new BadRequestException('Não é possível alterar o registro com o status "APROVADO"')
         }
         return true;
@@ -103,7 +112,7 @@ export class VendaService {
         let venda = await this.findById(id);
         if (!venda) {
             throw new NotFoundException('Nenhuma venda encontrada com esse id')
-        } else if(venda.status !== StatusVenda.validacao.key) {
+        } else if (venda.status !== StatusVenda.validacao) {
             throw new NotAcceptableException('Não é possível deletar um registro com status diferente de "Em validação"')
         }
         return true
@@ -111,11 +120,20 @@ export class VendaService {
 
     verificarStatusVendaValido(statusVenda) {
         for (let status in StatusVenda) {
-            if (StatusVenda[status].key === statusVenda) {
-                return true
+            console.log(StatusVenda[status] == statusVenda)
+            if (StatusVenda[status] == statusVenda) {
+                return false
             }
         }
-        return false;
+        return true;
+    }
+
+    async verificarCodigoVendaExiste(codigo) {
+        let venda = await this.findByCodigo(codigo);
+        if (venda) {
+            throw new BadRequestException(`Já existe uma venda com o código ${codigo}`)
+        }
+        return true
     }
 
 }

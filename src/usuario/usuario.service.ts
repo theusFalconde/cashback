@@ -4,6 +4,7 @@ import { Model } from 'mongoose';
 import { Role } from 'src/common/enum/role.enum';
 import { UsuarioDto } from './dto/usuario.dto';
 import { Usuario } from './interface/usuario.interface';
+import { Util } from '../common/util/util';
 
 @Injectable()
 export class UsuarioService {
@@ -17,10 +18,11 @@ export class UsuarioService {
   }
 
   async findByEmail(email): Model<Usuario> {
-    return await this.usuarioModel.findOne({ email: email });
+    return await this.usuarioModel.findOne({ email: email, status: true });
   }
 
   async findByCpf(cpf): Model<Usuario> {
+    cpf = Util.removeMaskCpf(cpf)
     return await this.usuarioModel.findOne({ cpf: cpf });
   }
 }

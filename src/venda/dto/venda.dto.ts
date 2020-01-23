@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsString, IsNumber, IsDateString, Min, MaxLength } from 'class-validator';
 import { Usuario } from 'src/usuario/interface/usuario.interface';
+import { StatusVenda } from 'src/common/enum/vendaStatus.enum';
 
 export class VendaDto {
   @ApiProperty()
@@ -8,7 +9,7 @@ export class VendaDto {
   @IsNotEmpty({ message: 'Por favor preencha o Código!' })
   codigo: string;
 
-  @ApiProperty()
+  @ApiProperty({ type: Number })
   @IsNumber()
   @Min(0)
   @IsNotEmpty({ message: 'Por favor preencha o Valor!' })
@@ -28,8 +29,7 @@ export class VendaDto {
   @IsNotEmpty({ message: 'Por favor preencha o CPF do Revendedor!' })
   cpf: string;
 
-  @ApiProperty()
-  @MaxLength(1)
+  @ApiProperty({ default: StatusVenda.validacao, enum: StatusVenda })
   @IsString()
   status: string;
 

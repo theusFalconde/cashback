@@ -5,10 +5,11 @@ import { VendaSchema } from './schema/venda.schema';
 import { VendaController } from './venda.controller';
 import { VendaService } from './venda.service';
 import { PassportModule } from '@nestjs/passport';
+import { UsuarioSchema } from 'src/usuario/schema/usuario.schema';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{name: 'Venda', schema: VendaSchema}]),
+    MongooseModule.forFeature([{name: 'Venda', schema: VendaSchema}, {name: 'Usuario', schema: UsuarioSchema}]),
     PassportModule.register({ defaultStrategy: 'jwt', session: false }),
     HttpModule,
     UsuarioModule,
