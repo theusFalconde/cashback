@@ -1,6 +1,9 @@
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
+import {
+  FastifyAdapter,
+  NestFastifyApplication,
+} from '@nestjs/platform-fastify';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 
@@ -9,8 +12,6 @@ async function initSwagger(app: NestFastifyApplication) {
     .setTitle('Cashback API')
     .setDescription('APIs do Sistema Cashback')
     .setVersion('1.0')
-    .addTag('Auth')
-    .addTag('Usuario')
     .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, options);
