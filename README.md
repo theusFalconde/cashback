@@ -2,7 +2,7 @@
 
 ## Descrição
 
-````bash
+```bash
 
 As API's do sistema Cashback foi desenvolvida utilizando a linguagem de programação NodeJS com o framework NestJS.
 
@@ -24,7 +24,7 @@ A rota para deletar uma Venda está protegida e só pode ser acessada por um usu
 
 ### senha: senha01
 
-````
+```
 
 ## Instalação
 
