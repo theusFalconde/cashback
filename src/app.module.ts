@@ -1,7 +1,5 @@
 import { HttpModule, Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { UsuarioModule } from './usuario/usuario.module';
 import { VendaModule } from './venda/venda.module';
@@ -16,8 +14,6 @@ import { VendaModule } from './venda/venda.module';
     AuthModule,
     HttpModule,
     VendaModule,
-  ],
-  controllers: [AppController],
-  providers: [AppService],
+  ]
 })
 export class AppModule {}
