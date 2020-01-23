@@ -1,4 +1,4 @@
-import { Usuario } from 'src/usuario/interface/usuario.interface';
+import { Usuario } from '../../usuario/interface/usuario.interface';
 
 export interface Venda {
   readonly id: string;

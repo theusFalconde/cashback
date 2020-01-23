@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsDateString, IsNotEmpty, IsNumber, IsString, MaxLength, Min } from 'class-validator';
-import { StatusVenda } from 'src/common/enum/vendaStatus.enum';
-import { Usuario } from 'src/usuario/interface/usuario.interface';
+import { StatusVenda } from '../../common/enum/vendaStatus.enum';
+import { Usuario } from '../../usuario/interface/usuario.interface';
 
 export class VendaDto {
   @ApiProperty()

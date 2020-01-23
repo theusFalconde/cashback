@@ -7,9 +7,9 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { StatusVenda } from 'src/common/enum/vendaStatus.enum';
-import { Usuario } from 'src/usuario/interface/usuario.interface';
-import { UsuarioService } from 'src/usuario/usuario.service';
+import { StatusVenda } from '../common/enum/vendaStatus.enum';
+import { Usuario } from '../usuario/interface/usuario.interface';
+import { UsuarioService } from '../usuario/usuario.service';
 import { Util } from '../common/util/util';
 import { VendaDto } from './dto/venda.dto';
 import { Venda } from './interface/venda.interface';

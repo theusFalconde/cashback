@@ -9,12 +9,13 @@ import {
   Put,
   UseFilters,
   UseGuards,
+  HttpCode,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { Roles } from 'src/common/decorator/roles.decorator';
-import { HttpExceptionFilter } from 'src/common/filter/http-exception.filter';
-import { RolesGuard } from 'src/common/guard/roles.guard';
+import { Roles } from '../common/decorator/roles.decorator';
+import { HttpExceptionFilter } from '../common/filter/http-exception.filter';
+import { RolesGuard } from '../common/guard/roles.guard';
 import { VendaDto } from './dto/venda.dto';
 import { VendaService } from './venda.service';
 
@@ -25,6 +26,7 @@ export class VendaController {
   constructor(private vendaService: VendaService) {}
 
   @ApiBearerAuth()
+  @HttpCode(201)
   @Post('/criarVenda')
   @UseGuards(AuthGuard())
   async create(@Body() vendaDto: VendaDto) {
@@ -36,23 +38,25 @@ export class VendaController {
   }
 
   @ApiBearerAuth()
+  @HttpCode(204)
   @Put('/atualizarVenda/:id')
   @UseGuards(AuthGuard())
   async update(@Param('id') id: string, @Body() vendaDto: VendaDto) {
     try {
-      return await this.vendaService.update(id, vendaDto);
+      await this.vendaService.update(id, vendaDto);
     } catch (err) {
       throw new InternalServerErrorException(err.message);
     }
   }
 
   @ApiBearerAuth()
+  @HttpCode(204)
   @Delete('/deletarVenda/:id')
   @UseGuards(AuthGuard(), RolesGuard)
   @Roles('admin')
   async delete(@Param('id') id: string) {
     try {
-      return await this.vendaService.delete(id);
+      await this.vendaService.delete(id);
     } catch (err) {
       throw new InternalServerErrorException(err.message);
     }
