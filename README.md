@@ -6,7 +6,7 @@ As API's do sistema Cashback foi desenvolvida utilizando a linguagem de programa
 
 O Banco de dados utilizado foi o mongoDB, a base de dados está na nuvem.
 
-Exemplo registro:
+Exemplo registro no BD:
 
 <img src="https://github.com/theusFalconde/cashback/blob/master/public/exemplo_registro.png?raw=true" alt="Exemplo Registro" />
 
