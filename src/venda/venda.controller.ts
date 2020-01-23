@@ -8,13 +8,13 @@ import { RolesGuard } from 'src/common/guard/roles.guard';
 import { Roles } from 'src/common/decorator/roles.decorator';
 import { StatusVenda } from 'src/common/enum/vendaStatus.enum';
 
-@ApiBearerAuth()
 @ApiTags('Venda')
 @Controller('venda')
 @UseFilters(HttpExceptionFilter)
 export class VendaController {
     constructor(private vendaService: VendaService) { }
 
+    @ApiBearerAuth()
     @Post('/criarVenda')
     @UseGuards(AuthGuard())
     async create(@Body() vendaDto: VendaDto) {
@@ -25,6 +25,7 @@ export class VendaController {
         }
     }
 
+    @ApiBearerAuth()
     @Put('/atualizarVenda/:id')
     @UseGuards(AuthGuard())
     async update(@Param('id') id: string, @Body() vendaDto: VendaDto) {
@@ -35,6 +36,7 @@ export class VendaController {
         }
     }
 
+    @ApiBearerAuth()
     @Delete('/deletarVenda/:id')
     @UseGuards(AuthGuard(), RolesGuard)
     @Roles('admin')
@@ -47,12 +49,20 @@ export class VendaController {
         }
     }
 
+    @ApiBearerAuth()
+    @Get('/buscarVendaPorCodigo/:codigo')
+    async findByCodigo(@Param('codigo') codigo: string) {
+        return await this.vendaService.findByCodigoForResponse(codigo);
+    }
+
+    @ApiBearerAuth()
     @Get('/buscarTodasVendas')
     async findAll() {
         return await this.vendaService.findAllForResponse();
     }
 
-    @Get('/buscarVendasPorCpf:cpf')
+    @ApiBearerAuth()
+    @Get('/buscarVendasPorCpf/:cpf')
     async findByCpf(@Param('cpf') cpf: string) {
         return await this.vendaService.findByCpfForResponse(cpf);
     }

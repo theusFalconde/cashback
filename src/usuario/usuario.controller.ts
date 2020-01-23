@@ -4,7 +4,6 @@ import { HttpExceptionFilter } from '../common/filter/http-exception.filter';
 import { UsuarioDto } from './dto/usuario.dto';
 import { UsuarioService } from './usuario.service';
 
-@ApiBearerAuth()
 @ApiTags('Usuario')
 @Controller('usuario')
 @UseFilters(HttpExceptionFilter)

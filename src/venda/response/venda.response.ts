@@ -2,80 +2,30 @@ import { Usuario } from "src/usuario/interface/usuario.interface";
 import { VendaUtil } from "../util/venda.util";
 
 export class VendaResponse {
-    private _id: string
+    private id: string
 
-    private _codigo: string;
+    private codigo: string;
 
-    private _valor: number;
+    private valor: number;
 
-    private _data: Date;
+    private data: Date;
 
-    private _status: string;
+    private status: string;
 
-    private _usuario: Usuario;
+    private usuario: Usuario;
+
+    private percCashback: number;
+
+    private valorCashback: number;
 
     constructor(id: string, codigo: string, valor: number, data: Date, status: string, usuario: Usuario) { 
-        this._id = id
-        this._codigo = codigo;
-        this._valor = valor;
-        this._data = data;
-        this._status = status;
-        this._usuario = usuario;
-    }
-
-    get id() {
-        return this._id;
-    }
-
-    set id(id: string) {
-        this._id = id;
-    }
-
-    get codigo() {
-        return this._codigo;
-    }
-
-    set codigo(codigo: string) {
-        this._codigo = codigo;
-    }
-
-    get valor() {
-        return this._valor;
-    }
-
-    set valor(valor: number) {
-        this._valor = valor;
-    }
-
-    get data() {
-        return this._data;
-    }
-
-    set data(data: Date) {
-        this._data = data;
-    }
-
-    get status() {
-        return VendaUtil.getStatusDesc(this._status);
-    }
-
-    set status(status: string) {
-        this._status = status;
-    }
-
-    get usuario() {
-        return this._usuario;
-    }
-
-    set usuario(usuario: Usuario) {
-        this._usuario = usuario;
-    }
-
-    get percCashback() {
-        return VendaUtil.calcPercCashback(this._valor);
-    }
-
-    get valorCashback() {
-        return VendaUtil.calcValorCashback(this._valor);
+        this.id = id
+        this.codigo = codigo;
+        this.valor = valor;
+        this.data = data;
+        this.status = VendaUtil.getStatusDesc(status);
+        this.usuario = usuario;
+        this.percCashback = VendaUtil.calcPercCashback(valor)
+        this.valorCashback = VendaUtil.calcValorCashback(valor)
     }
 }

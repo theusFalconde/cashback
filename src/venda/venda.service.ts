@@ -9,13 +9,14 @@ import { VendaDto } from './dto/venda.dto';
 import { Venda } from './interface/venda.interface';
 import { VendaResponse } from './response/venda.response';
 import { VendaUtil } from './util/venda.util';
+import { map } from 'rxjs/operators';
 
 @Injectable()
 export class VendaService {
     constructor(@InjectModel('Venda') private vendaModel: Model<Venda>,
         @InjectModel('Usuario') private usuarioModel: Model<Usuario>,
         private usuarioService: UsuarioService,
-        private readonly httpService: HttpService) { }
+        private httpService: HttpService) { }
 
     async create(vendaDto: VendaDto) {
         if (await this.verificarCodigoVendaExiste(vendaDto.codigo)) {
@@ -51,9 +52,18 @@ export class VendaService {
 
     async findCashbackAcumuladoByCpf(cpf) {
         let headerRequest = { 'Authorization': VendaUtil.tokenApiExterna }
-        let retornoApi = await this.httpService.get(VendaUtil.urlApiExterna + cpf, { headers: headerRequest })
-        console.log('Retorno API externa: ', retornoApi)
-        return retornoApi
+        let response = await this.httpService.get(VendaUtil.urlApiExterna + cpf, { headers: headerRequest })
+            .toPromise();
+        let valor = response.data.body.credit
+        return { 
+            codigo: Math.random(), 
+            valor: valor, 
+            data: new Date(), 
+            status: 'Consulta externa', 
+            cpf: cpf,
+            percCashback: VendaUtil.calcPercCashback(valor),
+            valorCashback: VendaUtil.calcValorCashback(valor)
+        }
     }
 
     async findById(id): Model<Venda> {
@@ -66,7 +76,8 @@ export class VendaService {
 
     async findByCpf(cpf): Promise<Venda[]> {
         cpf = Util.removeMaskCpf(cpf)
-        return await this.vendaModel.find({ "usuario.cpf": cpf }).populate('usuario', this.usuarioModel).exec();
+        let usuario = await this.usuarioService.findByCpf(cpf)
+        return await this.vendaModel.find({ "usuario": usuario.id }).populate('usuario', this.usuarioModel).exec();
     }
 
     async findAll(): Promise<Venda[]> {
@@ -79,9 +90,13 @@ export class VendaService {
     }
 
     async findByCpfForResponse(cpf) {
-        cpf = Util.removeMaskCpf(cpf)
         let vendas = await this.findByCpf(cpf);
         return this.modelToResponse(vendas);
+    }
+
+    async findByCodigoForResponse(codigo) {
+        let venda = await this.findByCodigo(codigo);
+        return new VendaResponse(venda.id, venda.codigo, venda.valor, venda.data, venda.status, venda.usuario);
     }
 
     modelToResponse(vendas) {
