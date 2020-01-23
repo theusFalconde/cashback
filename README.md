@@ -8,7 +8,7 @@ O Banco de dados utilizado foi o mongoDB, a base de dados está na nuvem.
 
 Exemplo registro:
 
-<img src="https://github.com/theusFalconde/cashback/blob/master/public/exemplo_registro.png?raw=true" width="500" alt="Exemplo Registro" />
+<img src="https://github.com/theusFalconde/cashback/blob/master/public/exemplo_registro.png?raw=true" alt="Exemplo Registro" />
 
 
 ## API
