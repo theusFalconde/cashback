@@ -54,6 +54,6 @@ UsuarioSchema.methods.checkPassword = function(attempt, callback) {
 UsuarioSchema.methods.toJSON = function() {
   var obj = this.toObject();
   delete obj.senha;
-  delete obj._v;
+  delete obj.v;
   return obj;
 };

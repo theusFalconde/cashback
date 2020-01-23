@@ -27,6 +27,6 @@ export const VendaSchema = new mongoose.Schema({
 
 VendaSchema.methods.toJSON = function() {
   var obj = this.toObject();
-  delete obj._v;
+  delete obj.v;
   return obj;
 };
