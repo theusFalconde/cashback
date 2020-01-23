@@ -9,7 +9,6 @@ import { VendaDto } from './dto/venda.dto';
 import { Venda } from './interface/venda.interface';
 import { VendaResponse } from './response/venda.response';
 import { VendaUtil } from './util/venda.util';
-import { map } from 'rxjs/operators';
 
 @Injectable()
 export class VendaService {

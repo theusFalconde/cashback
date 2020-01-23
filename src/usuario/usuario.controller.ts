@@ -1,5 +1,5 @@
 import { BadRequestException, Body, Controller, Post, UseFilters } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiTags } from '@nestjs/swagger';
 import { HttpExceptionFilter } from '../common/filter/http-exception.filter';
 import { UsuarioDto } from './dto/usuario.dto';
 import { UsuarioService } from './usuario.service';

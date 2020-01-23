@@ -2,9 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Role } from 'src/common/enum/role.enum';
+import { Util } from '../common/util/util';
 import { UsuarioDto } from './dto/usuario.dto';
 import { Usuario } from './interface/usuario.interface';
-import { Util } from '../common/util/util';
 
 @Injectable()
 export class UsuarioService {

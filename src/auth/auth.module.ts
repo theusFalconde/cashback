@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
+import { JwtModule } from '@nestjs/jwt';
+import { PassportModule } from '@nestjs/passport';
+import { UsuarioModule } from '../usuario/usuario.module';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
-import { JwtModule } from '@nestjs/jwt';
+import { JwtConstante } from './constant/jwt.constant';
 import { JwtStrategy } from './strategy/jwt.strategy';
-import { UsuarioModule } from '../usuario/usuario.module';
-import { PassportModule } from '@nestjs/passport';
-import { JwtConstante } from './constant/jwt.constant'
 
 @Module({
   imports: [

@@ -1,12 +1,11 @@
-import { Body, Controller, InternalServerErrorException, Post, UseFilters, UseGuards, Put, Param, Delete, Get, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, InternalServerErrorException, Param, Post, Put, UseFilters, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { ApiBearerAuth, ApiTags, ApiQuery } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { Roles } from 'src/common/decorator/roles.decorator';
 import { HttpExceptionFilter } from 'src/common/filter/http-exception.filter';
+import { RolesGuard } from 'src/common/guard/roles.guard';
 import { VendaDto } from './dto/venda.dto';
 import { VendaService } from './venda.service';
-import { RolesGuard } from 'src/common/guard/roles.guard';
-import { Roles } from 'src/common/decorator/roles.decorator';
-import { StatusVenda } from 'src/common/enum/vendaStatus.enum';
 
 @ApiTags('Venda')
 @Controller('venda')
