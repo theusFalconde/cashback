@@ -2,17 +2,12 @@
 
 ## Descrição
 
-```bash
-
 As API's do sistema Cashback foi desenvolvida utilizando a linguagem de programação NodeJS com o framework NestJS.
 
 O Banco de dados utilizado foi o mongoDB, a base de dados está na nuvem.
 
-```
 
 ## API
-
-```bash
 
 Os endpoints estão mapeados utilizando o Swagger, que pode ser acessado pelo link (http://localhost:3000/api)
 
@@ -24,7 +19,6 @@ A rota para deletar uma Venda está protegida e só pode ser acessada por um usu
 
 ### senha: senha01
 
-```
 
 ## Instalação
 
