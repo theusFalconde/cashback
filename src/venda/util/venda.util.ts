@@ -30,8 +30,8 @@ export class VendaUtil {
 
     static getStatusDesc(statusVenda) {
         for (let status in StatusVenda) {
-            if (StatusVenda[status].key === statusVenda) {
-                return StatusVenda[status].value
+            if (StatusVenda[status] === statusVenda) {
+                return StatusVenda[status]
             }
         }
         return ''

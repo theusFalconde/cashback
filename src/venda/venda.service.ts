@@ -118,6 +118,9 @@ export class VendaService {
 
   async findByCodigoForResponse(codigo) {
     let venda = await this.findByCodigo(codigo);
+    if(!venda) {
+      throw new NotFoundException('Nenhuma venda encontrada com esse id');
+    }
     return new VendaResponse(
       venda.id,
       venda.codigo,

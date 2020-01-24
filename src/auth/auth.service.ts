@@ -17,13 +17,13 @@ export class AuthService {
     if(!usuarioLogando) {
       throw new BadRequestException('Usuário não encontrado ou bloqueado.')
     }
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
       usuarioLogando.checkPassword(login.senha, (err, isMatch) => {
-        if (err) throw new UnauthorizedException();
+        if (err) throw new UnauthorizedException('Usuário ou senha incorreto.');
         if (isMatch) {
           resolve(this.createJwtPayload(usuarioLogando));
         } else {
-          throw new UnauthorizedException();
+          reject(new UnauthorizedException('Usuário ou senha incorreto.'));
         }
       });
     });
@@ -34,7 +34,7 @@ export class AuthService {
     if (usuario) {
       return this.createJwtPayload(usuario);
     } else {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException('Usuário ou senha incorreto.');
     }
   }
 
