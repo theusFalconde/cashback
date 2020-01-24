@@ -11,8 +11,9 @@ export class UsuarioService {
   constructor(@InjectModel('Usuario') private usuarioModel: Model<Usuario>) { }
 
   async create(usuarioDto: UsuarioDto) {
-    usuarioDto.status = true;
+    usuarioDto.cpf = Util.removeMaskCpf(usuarioDto.cpf)
     usuarioDto.roles = [Role.basico];
+    usuarioDto.status = true;
     let usuarioCriado = new this.usuarioModel(usuarioDto);
     return await usuarioCriado.save();
   }

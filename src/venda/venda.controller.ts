@@ -70,6 +70,8 @@ export class VendaController {
 
   @ApiBearerAuth()
   @Get('/buscarTodasVendas')
+  @UseGuards(AuthGuard(), RolesGuard)
+  @Roles('admin')
   async findAll() {
     return await this.vendaService.findAllForResponse();
   }
