@@ -2,7 +2,7 @@
 
 ## Descrição
 
-As API's do sistema Cashback foi desenvolvida utilizando a linguagem de programação NodeJS com o framework NestJS.
+As API's do sistema Cashback foi desenvolvida utilizando NodeJS com o framework NestJS.
 
 O Banco de dados utilizado foi o mongoDB, a base de dados está na nuvem.
 
